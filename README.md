@@ -5,7 +5,7 @@
 
 > **Complete data engineering pipeline for stress-tolerant seed varieties database**
 
-A comprehensive system for collecting, processing, and analyzing stress-tolerant seed variety data from multiple Indian agricultural sources, featuring AI-powered data extraction, fuzzy matching algorithms, and comprehensive data analysis.
+A comprehensive system for collecting, processing, and analyzing stress-tolerant seed variety data from multiple Indian agricultural sources, featuring AI-powered data extraction, fuzzy matching algorithms, and comprehensive data analysis by Precision Development. 
 
 ## Quick Start
 
@@ -184,9 +184,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Author
 
-**Kushal Kumar**  
+**Kushal Kumar for Precision Development (PxD) **  
 Email: kd475@cornell.edu  
-Institution: Cornell University
+
 
 ## Acknowledgments
 
