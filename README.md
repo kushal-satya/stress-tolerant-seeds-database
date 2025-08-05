@@ -2,11 +2,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
 
-> **Complete data engineering pipeline for stress-tolerant seed varieties database with interactive dashboard**
+> **Complete data engineering pipeline for stress-tolerant seed varieties database**
 
-A comprehensive system for collecting, processing, and analyzing stress-tolerant seed variety data from multiple Indian agricultural sources, featuring AI-powered data extraction, fuzzy matching algorithms, and an interactive web dashboard.
+A comprehensive system for collecting, processing, and analyzing stress-tolerant seed variety data from multiple Indian agricultural sources, featuring AI-powered data extraction, fuzzy matching algorithms, and comprehensive data analysis.
 
 ## Quick Start
 
@@ -30,25 +29,20 @@ components = [
     'python 02_pdf_processing/extract_pdf_to_csv.py', 
     'python 03_data_integration/match_and_merge.py',
     'python 04_data_enrichment/enrich_from_context.py',
-    'python 05_structured_synthesis/generate_final_database.py',
-    'python 06_dashboard/app.py'
+    'python 05_structured_synthesis/generate_final_database.py'
 ]
 
 for cmd in components:
     print(f'Running: {cmd}')
     subprocess.run(cmd.split())
 "
-
-# Launch dashboard
-streamlit run 06_dashboard/app.py
 ```
 
 ## Features
 
-- **Automated Data Pipeline**: 6-stage modular architecture
+- **Automated Data Pipeline**: 5-stage modular architecture
 - **AI-Powered Extraction**: LLM-based PDF and web data processing  
 - **Smart Data Integration**: Fuzzy matching and deduplication
-- **Interactive Dashboard**: Streamlit-based exploration interface
 - **Comprehensive Analysis**: Jupyter notebook with detailed EDA
 - **Quality Assurance**: Data validation and completeness scoring
 - **Multi-Source Integration**: CSC PDFs + SeedNet portal data
@@ -63,7 +57,6 @@ stress-tolerant-seeds-database/
 ├── 03_data_integration/ # Fuzzy matching and data merging
 ├── 04_data_enrichment/ # Research context and data enhancement
 ├── 05_structured_synthesis/ # Final database generation
-├── 06_dashboard/       # Interactive Streamlit application
 ├── notebooks/          # Exploratory data analysis
 ├── data/              # Raw, processed, and final datasets
 └── config/            # Configuration files
@@ -146,9 +139,6 @@ python 04_data_enrichment/enrich_from_context.py
 
 # Database generation
 python 05_structured_synthesis/generate_final_database.py
-
-# Launch dashboard
-streamlit run 06_dashboard/app.py
 ```
 
 ### Running Complete Pipeline
@@ -165,7 +155,6 @@ Edit `config/config.ini` to customize:
 - Data source URLs and paths
 - Processing parameters
 - Database connection settings
-- Dashboard configuration
 - Logging levels
 
 ## Data Schema
