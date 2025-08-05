@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This codebook documents the comprehensive data engineering pipeline for identifying, cataloging, and analyzing stress-tolerant seed varieties across India. The project systematically consolidates data from regulatory notifications, commercial sources, genetic databases, and agricultural research repositories to create a queryable dashboard database for identifying stress-tolerant seed varieties by region.
+This codebook documents the comprehensive data engineering pipeline for identifying, cataloging, and analyzing stress-tolerant seed varieties across India. The project systematically consolidates data from regulatory notifications, agricultural institutions, and agricultural research repositories to create a queryable dashboard database for identifying stress-tolerant seed varieties by region.
 
 ### Primary Objective
 Create a comprehensive, queryable database that acts as a one-stop location for identifying new stress-tolerant seed varieties for different regions in India, with specific focus on climate resilience and agricultural sustainability.
@@ -23,12 +23,12 @@ Create a comprehensive, queryable database that acts as a one-stop location for 
 The data pipeline follows a systematic 4-stage approach:
 
 ```
-Stage 1: Universe Establishment → Stage 2: Data Collation → Stage 3: Genetic Analysis → Stage 4: Synthesis & Validation
+Stage 1: Universe Establishment → Stage 2: Data Collation → Stage 3: Trait Analysis → Stage 4: Synthesis & Validation
 ```
 
 #### Stage 1: Establish Universe of Seed Varieties (2008-Present)
 - **Objective**: Create comprehensive master list of officially released seed varieties
-- **Data Sources**: CSC meeting documents, Seed Gazette notifications
+- **Data Sources**: CSC meeting documents, Seed Gazette notifications, Seednet Portal Table
 - **Output**: Master list of approved varieties with basic metadata
 
 #### Stage 2: Data Collation and Enrichment  
@@ -36,8 +36,8 @@ Stage 1: Universe Establishment → Stage 2: Data Collation → Stage 3: Genetic
 - **Methods**: Web scraping, API integration, LLM-powered searches
 - **Output**: Enriched variety database with comprehensive traits
 
-#### Stage 3: Genetic and Trait Analysis
-- **Objective**: Link varieties to genetic markers and research findings
+#### Stage 3: Agronomic, Genetic and Trait Analysis
+- **Objective**: Link varieties to researchers, genetic markers and research findings
 - **Sources**: Academic repositories, genetic databases, research literature
 - **Output**: Varieties with genetic basis and performance data
 
@@ -48,12 +48,7 @@ Stage 1: Universe Establishment → Stage 2: Data Collation → Stage 3: Genetic
 
 ### 1.2 Technical Implementation
 
-The pipeline is implemented across multiple directories with specialized functions:
 
-- **`/e`**: Initial data collection and extraction (CSC scraping, SeedNet processing)
-- **`/enhanced_data_200`**: Advanced data processing with 200+ search results per variety
-- **`/f`**: Data enrichment and research context building
-- **`/fuzzy_matching_final`**: Data integration and deduplication using fuzzy matching
 
 ---
 
@@ -100,7 +95,7 @@ The pipeline is implemented across multiple directories with specialized functio
 | `yield_performance` | Yield characteristics | String | Research | "High yielding (45-50 q/ha)" |
 | `quality_parameters` | Quality traits | String[] | Research | ["High protein", "Good cooking quality"] |
 
-### 2.2 Stress Tolerance Parameters (Core Focus)
+### 2.2 Stress Tolerance Parameters ( Focus)
 
 #### 2.2.1 Weather Stress Tolerance
 | Variable | Description | Data Type | Source | Example |
@@ -141,15 +136,6 @@ The pipeline is implemented across multiple directories with specialized functio
 | `confidence_level` | Data confidence | String | Derived | "HIGH", "MEDIUM", "LOW" |
 | `data_sources` | Source identification | String[] | Multi | ["CSC", "SeedNet", "Literature"] |
 
-#### 2.4.2 Economic and Area Data (Enhancement Parameters)
-| Variable | Description | Data Type | Source | Example |
-|----------|-------------|-----------|---------|---------|
-| `crop_value_chain_worth` | Economic value in state | Float | External | 5000000000 |
-| `total_crop_area_state` | Cultivation area in state | Float | External | 2500000 |
-| `total_crop_area_india` | Total cultivation area | Float | External | 45000000 |
-| `price_history` | Market price trends | Float[] | External | [2500, 2600, 2700] |
-| `seed_multiplication_agency` | Seed production agency | String | Research | "NSC", "SSSC", "Private" |
-
 ---
 
 ## 3. Data Sources and Collection Methods
@@ -180,7 +166,7 @@ The pipeline is implemented across multiple directories with specialized functio
 ### 3.2 Commercial and Market Sources
 
 #### 3.2.1 Seed Company Databases
-- **Primary Source**: Fule Seeds (https://fuleseeds.com/products/)
+- **Primary Source**: Searching through specific keywords like buy/sale seed dealer etc.
 - **Data Fields**: Product specifications, performance data, market information
 - **Usage**: Data schema establishment and commercial validation
 
@@ -239,12 +225,10 @@ def scrape_seednet_portal():
     # Output: seednet_data/ directory with crop-wise CSVs
 ```
 
-**Processing Features:**
+**Processing :**
 - Selenium-based web automation
 - Dynamic content loading handling
 - Rate limiting and retry mechanisms
-- Crop-wise data organization
-- Real-time progress tracking
 
 ### 4.2 Stage 2: Data Enrichment
 
@@ -263,14 +247,10 @@ def enrich_variety_data():
 **Enrichment Process:**
 1. **Broad Search**: General variety information using search APIs
 2. **Institution-Specific Search**: Targeted queries by breeding institution
-3. **LLM-Powered Analysis**: Deep academic literature analysis
+3. **LLM-Powered Analysis**: Deep academic literature analysis to get the scholarly info
 4. **Trait Extraction**: Stress tolerance and quality trait identification
 5. **Genetic Marker Mining**: QTL and gene association discovery
 
-#### 4.2.2 Enhanced Data Processing (200+ Results)
-- **Location**: `/enhanced_data_200/`
-- **Scope**: Process 200+ search results per variety for comprehensive coverage
-- **Output**: High-confidence trait assignments with literature support
 
 ### 4.3 Stage 3: Data Integration and Fuzzy Matching
 
@@ -288,7 +268,6 @@ def fuzzy_match_varieties():
 
 **Matching Algorithms:**
 - **String Similarity**: Levenshtein distance, Jaro-Winkler
-- **Phonetic Matching**: Soundex, Metaphone
 - **Token-Based**: Set intersection, cosine similarity
 - **Crop-Aware Matching**: Crop-specific matching rules
 - **Institution Validation**: Cross-reference breeding institutions
@@ -297,7 +276,7 @@ def fuzzy_match_varieties():
 - Similarity scores (0-100%)
 - Match quality categories (High/Medium/Low)
 - Crop match validation
-- Manual review flags for ambiguous matches
+- Manual review flags for ambiguous matches (by Anwesha)
 
 ### 4.4 Stage 4: Data Validation and Quality Assurance
 
@@ -315,12 +294,6 @@ def assess_data_quality():
     # - Cross-validation (20%)
     # - Expert verification (10%)
 ```
-
-#### 4.4.2 Expert Validation Protocol
-1. **Agricultural Expert Review**: Trait validation by crop specialists
-2. **Institution Verification**: Cross-check with breeding institutions
-3. **Literature Validation**: Peer-reviewed publication verification
-4. **Field Performance Validation**: Real-world performance data
 
 ---
 
@@ -453,7 +426,7 @@ quality_rules = {
 
 ---
 
-## 7. Technical Implementation Details
+## 7. Technical Details 
 
 ### 7.1 Technology Stack
 
@@ -505,21 +478,15 @@ Input Sources → Data Acquisition → Enrichment → Integration → Validation
 
 ### 7.2 Performance Optimization
 
-#### 7.2.1 Processing Efficiency
+#### Processing Efficiency
 - **Parallel Processing**: Multi-threaded data enrichment
-- **Caching**: Intelligent caching of API responses and search results
+- **Caching**: caching of API responses and search results
 - **Batch Processing**: Optimized batch sizes for different data sources
-- **Rate Limiting**: Respectful API usage with exponential backoff
 
-#### 7.2.2 Scalability Considerations
-- **Modular Design**: Independent processing stages
-- **Configurable Parameters**: Adjustable batch sizes and processing limits
-- **Progress Tracking**: Real-time processing status and ETA
-- **Error Recovery**: Robust error handling and resume capabilities
 
 ---
 
-## 8. Usage Guidelines and Best Practices
+## 8. Usage 
 
 ### 8.1 Data Access and Interpretation
 
@@ -538,7 +505,7 @@ Input Sources → Data Acquisition → Enrichment → Integration → Validation
 ### 8.2 Data Update and Maintenance
 
 #### 8.2.1 Update Frequency
-- **CSC Documents**: Monthly monitoring for new meeting minutes
+- **CSC Documents**: Quarterly monitoring for new meeting minutes
 - **SeedNet Portal**: Quarterly comprehensive updates
 - **Literature Mining**: Continuous background processing
 - **Expert Validation**: Annual comprehensive review cycles
@@ -551,59 +518,31 @@ Input Sources → Data Acquisition → Enrichment → Integration → Validation
 
 ---
 
-## 9. Research Applications and Extensions
+## 9. Data Governance and Ethics
 
-### 9.1 Academic Research Applications
+### 9.1 Data Privacy and Sharing
 
-#### 9.1.1 Climate Change Research
-- **Adaptation Mapping**: Identify varieties for changing climate zones
-- **Resilience Assessment**: Evaluate crop portfolio resilience
-- **Vulnerability Analysis**: Identify gaps in stress-tolerant varieties
-
-#### 9.1.2 Breeding Program Support
-- **Parent Selection**: Identify donors for stress tolerance traits
-- **Genetic Diversity**: Assess genetic base of stress tolerance
-- **Trait Pyramiding**: Support for multi-stress tolerance development
-
-### 9.2 Policy and Planning Applications
-
-#### 9.2.1 Agricultural Policy
-- **Seed Policy**: Evidence-based seed variety recommendations
-- **Climate Adaptation**: Regional adaptation strategy development
-- **Food Security**: Stress-tolerant variety deployment planning
-
-#### 9.2.2 Extension Services
-- **Farmer Advisory**: Variety selection support for specific conditions
-- **Technology Transfer**: Facilitate adoption of stress-tolerant varieties
-- **Capacity Building**: Training programs for agricultural extension workers
-
----
-
-## 10. Data Governance and Ethics
-
-### 10.1 Data Privacy and Sharing
-
-#### 10.1.1 Data Sources and Rights
+#### 9.1.1 Data Sources and Rights
 - **Public Domain**: CSC and gazette notifications are public documents
 - **Research Ethics**: Literature mining follows fair use principles
 - **Commercial Sensitivity**: Respect for proprietary breeding information
 - **Attribution**: Proper credit to data sources and contributors
 
-#### 10.1.2 Data Sharing Policy
+#### 9.1.2 Data Sharing Policy
 - **Open Science**: Support for open access to agricultural data
 - **Researcher Access**: Academic research use encouraged
 - **Commercial Use**: Contact for commercial licensing
 - **Government Use**: Full support for policy and planning applications
 
-### 10.2 Quality Disclaimers
+### 9.2 Quality Disclaimers
 
-#### 10.2.1 Data Limitations
+#### 9.2.1 Data Limitations
 - **Performance Variability**: Variety performance depends on local conditions
 - **Trait Expression**: Stress tolerance may vary with environment
 - **Temporal Changes**: Pathogen races and climate may affect performance
 - **Regional Adaptation**: Local validation recommended before adoption
 
-#### 10.2.2 Usage Recommendations
+#### 9.2.2 Usage Recommendations
 - **Expert Consultation**: Consult agricultural experts for local applications
 - **Field Validation**: Conduct local trials before large-scale adoption
 - **Continuous Monitoring**: Regular performance assessment and feedback
@@ -611,44 +550,31 @@ Input Sources → Data Acquisition → Enrichment → Integration → Validation
 
 ---
 
-## 11. Future Development Roadmap
+## 10. Future Development Roadmap
 
-### 11.1 Enhancement Priorities
+### 10.1 Enhancement for future
 
-#### 11.1.1 Data Expansion (Phase 2)
+#### 10.1.1 Data Expansion (Phase 2)
 - **Economic Data Integration**: Market prices and economic impact data
 - **Weather Data Linkage**: Historical and real-time weather integration
 - **Performance Analytics**: Yield and adaptation performance tracking
 - **Supply Chain Data**: Seed availability and distribution networks
 
-#### 11.1.2 Technical Enhancements
-- **Real-time Updates**: Automated monitoring and data refresh
-- **AI-Powered Insights**: Machine learning for trait prediction
-- **Interactive Dashboards**: Enhanced visualization and query capabilities
-- **Mobile Applications**: Field-accessible variety selection tools
+### 10.2 Collaboration Opportunities
 
-### 11.2 Collaboration Opportunities
-
-#### 11.2.1 Institutional Partnerships
+#### 10.2.1 Institutional Partnerships
 - **ICAR Integration**: Direct data feeds from research institutes
 - **University Collaborations**: Student research projects and thesis work
 - **International Partnerships**: CGIAR centers and global research networks
 - **Private Sector Engagement**: Seed company collaboration and validation
 
-#### 11.2.2 Technology Partnerships
-- **Cloud Infrastructure**: Scalable hosting and computing resources
-- **API Development**: Integration with existing agricultural systems
-- **Data Standards**: Contribute to global agricultural data standards
-- **Open Source Community**: Community-driven development and maintenance
-
 ---
 
-## 12. Contact and Support
+## 11. Contact and Support
 
-### 12.1 Project Team
-- **Lead Developer**: Kushal Kumar (kd475@cornell.edu)
-- **Institution**: Cornell University
-- **Department**: Agricultural and Biological Engineering
+### 11.1 Project Team
+- **Developer**: Kushal Kumar (kd475@cornell.edu)
+- **Institution**: Precision Development 
 
 ### 12.2 Technical Support
 - **Repository**: https://github.com/kushal-satya/stress-tolerant-seeds-database
@@ -698,4 +624,4 @@ Input Sources → Data Acquisition → Enrichment → Integration → Validation
 
 **Last Updated**: August 5, 2025  
 **Document Version**: 2.0  
-**Next Review Date**: December 2025
+**Next Review Date**: December 2025 (?)
